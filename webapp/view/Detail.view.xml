@@ -1,0 +1,91 @@
+<mvc:View 
+    controllerName="com.bootcamp.sapui5.finalproject.controller.Detail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+    xmlns:table="sap.ui.table">
+    
+    <Page id="pageDetail" title="Detalle Proveedor" showNavButton="true" navButtonPress="onNavBack">
+        <content>
+            <VBox>
+                <!-- Sección de información del proveedor -->
+                <f:SimpleForm
+                    editable="false"
+                    layout="ResponsiveGridLayout"
+                    title="Información del Proveedor"
+                    labelSpanXL="3" labelSpanL="3"
+                    labelSpanM="3" labelSpanS="12"
+                    adjustLabelSpan="false" 
+                    emptySpanXL="4" emptySpanL="4" 
+                    emptySpanM="4" emptySpanS="0"
+                    columnsXL="1" columnsL="1" columnsM="1"
+                    singleContainerFullSize="false">
+                    
+                    <f:content>
+                        <Label text="ID Proveedor"/>
+                        <Text text="{SupplierID}"/>
+                        
+                        <Label text="Nombre Compañía"/>
+                        <Text text="{CompanyName}"/>
+                        
+                        <Label text="Contacto"/>
+                        <Text text="{ContactName}"/>
+                        
+                        <Label text="Título Contacto"/>
+                        <Text text="{ContactTitle}"/>
+                        
+                        <Label text="Dirección"/>
+                        <Text text="{Address}, {PostalCode}, {City}"/>
+                        
+                        <Label text="País"/>
+                        <Text text="{Country}"/>
+                        
+                        <Label text="Teléfono"/>
+                        <Text text="{Phone}"/>
+                    </f:content>
+                </f:SimpleForm>
+                
+                <!-- Tabla de productos del proveedor -->
+             <smartTable:SmartTable
+                    id="ST_ORDER_D"
+                    entitySet="Products"
+                    tableBindingPath="Products"
+                    initiallyVisibleFields="ProductID,Category,ProductName,QuantityPerUnit,UnitPrice,UnitsInStock"
+                    tableType="ResponsiveTable"
+                    enableExport="true"
+                    useVariantManagement="false"
+                    useTablePersonalisation="true"
+                    header="{i18n>headerOrderDetails}"
+                    showRowCount="true"
+                    showFullScreenButton="true"
+                    enableAutoBinding="true"
+                    class="sapUiResponsiveContentPadding"
+                    enableAutoColumnWidth="true"
+                    editTogglable="false"
+                    beforeRebindTable=".onBeforeRebindTable">
+                    
+                    <smartTable:customToolbar>
+                        <OverflowToolbar>
+                            <ToolbarSpacer/>
+                            <Button 
+                                icon="sap-icon://add" 
+                                text="Agregar Producto" 
+                                press=".onAddProduct"/>
+                        </OverflowToolbar>
+                    </smartTable:customToolbar>
+                    
+                    <table:Table 
+                        id="productsTable"
+                        rowSelectionChange=".onProductPress">
+                    </table:Table>
+                </smartTable:SmartTable>
+            </VBox>
+        </content>
+    </Page>
+    
+    <!-- Incluir el diálogo como dependencia -->
+    <core:Fragment fragmentName="com.bootcamp.sapui5.finalproject.view.fragments.CreateProductDialog" type="XML"/>
+    <core:Fragment fragmentName="com.bootcamp.sapui5.finalproject.view.fragments.ViewProductDialog" type="XML"/>
+</mvc:View>

@@ -1,0 +1,82 @@
+<c:FragmentDefinition
+    xmlns="sap.ui.table"
+    xmlns:m="sap.m"
+    xmlns:c="sap.ui.core"
+>
+    <Table id="idProductsTable"
+        rows="{path: 'SupplierCollection>/'}"
+        selectionMode="None"
+        enableColumnReordering="true"
+        cellClick="onItemPress"
+        >
+        
+        
+        <columns>
+            <!-- Empresa -->
+            <Column id="colCompany" sortProperty="CompanyName" filterProperty="CompanyName">
+                <m:Label text="Empresa" />
+                <template>
+                    <m:ObjectIdentifier
+                     text="{SupplierCollection>CompanyName}"
+                    />
+                </template>
+            </Column>
+            
+            <!-- Contacto -->
+            <Column id="colContact" sortProperty="ContactName" filterProperty="ContactName">
+                <m:Label text="Contacto" />
+                <template>
+                    <m:Text text="{SupplierCollection>ContactName}"/>
+                </template>
+            </Column>
+            
+            <!-- Puesto -->
+            <Column id="colTitle" sortProperty="ContactTitle" filterProperty="ContactTitle">
+                <m:Label text="Puesto" />
+                <template>
+                    <m:Text text="{SupplierCollection>ContactTitle}"/>
+                </template>
+            </Column>
+            
+            <!-- Dirección -->
+            <Column id="colAddress" sortProperty="Address" filterProperty="Address">
+                <m:Label text="Dirección" />
+                <template>
+                    <m:Text text="{SupplierCollection>Address}"/>
+                </template>
+            </Column>
+            
+            <!-- Ciudad -->
+            <Column id="colCity" sortProperty="City" filterProperty="City">
+                <m:Label text="Ciudad" />
+                <template>
+                    <m:Text text="{SupplierCollection>City}"/>
+                </template>
+            </Column>
+            
+            <!-- Código Postal -->
+            <Column id="colPostal" sortProperty="PostalCode" filterProperty="PostalCode">
+                <m:Label text="Código Postal" />
+                <template>
+                    <m:Text text="{SupplierCollection>PostalCode}"/>
+                </template>
+            </Column>
+            
+            <!-- País -->
+            <Column id="colCountry" sortProperty="Country" filterProperty="Country">
+                <m:Label text="País" />
+                <template>
+                    <m:Text text="{SupplierCollection>Country}"/>
+                </template>
+            </Column>
+            
+            <!-- Teléfono -->
+            <Column id="colPhone" sortProperty="Phone" filterProperty="Phone">
+                <m:Label text="Teléfono" />
+                <template>
+                    <m:Text text="{SupplierCollection>Phone}"/>
+                </template>
+            </Column>
+        </columns>
+    </Table>
+</c:FragmentDefinition>

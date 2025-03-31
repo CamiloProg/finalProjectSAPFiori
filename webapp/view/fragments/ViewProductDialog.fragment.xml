@@ -1,0 +1,53 @@
+<core:FragmentDefinition 
+    xmlns="sap.m"  
+    xmlns:l="sap.ui.layout"  
+    xmlns:f="sap.ui.layout.form"  
+    xmlns:core="sap.ui.core"> 
+    <Dialog  
+        id="ViewProductDialog"  
+        title="Detalle del Producto"  
+        icon="sap-icon://product"  
+        class="sapUiSizeCompact"> 
+        <content> 
+            <f:SimpleForm 
+                editable="false"
+                id="ViewProductForm" 
+                layout="ResponsiveGridLayout" 
+                labelSpanXL="4" 
+                labelSpanL="4" 
+                labelSpanM="4" 
+                labelSpanS="4" 
+                adjustLabelSpan="false"  
+                columnsXL="1" 
+                columnsL="1" 
+                columnsM="1" 
+                singleContainerFullSize="false" 
+                width="30rem"> 
+                <f:content>     
+                    <Label text="ID Producto"/>
+                    <Text text="{ProductID}"/>
+                    
+                    <Label text="Nombre Producto"/>
+                    <Text text="{ProductName}"/>
+                    
+                    <Label text="Categoría"/>
+                    <Text text="{Category/CategoryName}"/>
+                    
+                    <Label text="Cantidad por Unidad"/>
+                    <Text text="{QuantityPerUnit}"/>
+                    
+                    <Label text="Precio Unitario"/>
+                    <Text text="{UnitPrice}"/>
+                    
+                    <Label text="Unidades en Stock"/>
+                    <Text text="{UnitsInStock}"/>
+                </f:content>
+            </f:SimpleForm> 
+        </content> 
+        <beginButton> 
+            <Button 
+                text="Cerrar" 
+                press=".onCloseViewDialog"/> 
+        </beginButton> 
+    </Dialog> 
+</core:FragmentDefinition>
