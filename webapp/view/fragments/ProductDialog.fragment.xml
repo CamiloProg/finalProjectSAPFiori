@@ -2,108 +2,110 @@
     xmlns="sap.m"
     xmlns:l="sap.ui.layout"
     xmlns:f="sap.ui.layout.form"
-    xmlns:core="sap.ui.core"
->
+    xmlns:core="sap.ui.core">
+    
     <Dialog
         id="ProductDialog"
         title="{viewModel>/dialogTitle}"
         icon="{viewModel>/dialogIcon}"
-        class="sapUiSizeCompact"
-    >
+        class="sapUiSizeCompact">
+        
         <content>
             <f:SimpleForm
                 editable="{viewModel>/editable}"
                 id="ProductForm"
-                layout="ResponsiveGridLayout"
-            >
+                layout="ResponsiveGridLayout">
+                
                 <f:content>
                     <!-- ID Producto -->
-                    <Label text="{i18n>productID}" />
+                    <Label text="ID Producto" />
                     <Input
                         value="{newProduct>/ProductID}"
                         enabled="false"
-                        visible="{= !${viewModel>/viewMode}}"
-                    />
+                        visible="{= !${viewModel>/viewMode}}" />
                     <Text
                         text="{ProductID}"
-                        visible="{viewModel>/viewMode}"
-                    />
+                        visible="{viewModel>/viewMode}" />
 
                     <!-- Nombre Producto -->
-                    <Label text="{i18n>productName}" />
+                    <Label text="Nombre Producto" />
                     <Input
                         value="{newProduct>/ProductName}"
                         visible="{= !${viewModel>/viewMode}}"
-                    />
+                        required="true" />
                     <Text
                         text="{ProductName}"
-                        visible="{viewModel>/viewMode}"
-                    />
+                        visible="{viewModel>/viewMode}" />
 
                     <!-- Categoría -->
-                    <Label text="{i18n>category}" />
-                   <ComboBox 
+                    <Label text="Categoría" />
+                    <ComboBox 
                         selectedKey="{newProduct>/CategoryID}"
                         items="{
                             path: '/Categories',
                             templateShareable: false
                         }"
-                        visible="{= !${viewModel>/viewMode}}">
+                        visible="{= !${viewModel>/viewMode}}"
+                        required="true"
+                        enabled="{= ${/Categories}.length > 0}">
                         <core:Item key="{CategoryID}" text="{CategoryName}"/>
                     </ComboBox>
                     <Text
                         text="{Category/CategoryName}"
-                        visible="{viewModel>/viewMode}"
-                    />
+                        visible="{viewModel>/viewMode}" />
 
                     <!-- Cantidad -->
-                    <Label text="{i18n>quantityPerUnit}" />
+                    <Label text="Cantidad por Unidad" />
                     <Input
                         value="{newProduct>/QuantityPerUnit}"
                         visible="{= !${viewModel>/viewMode}}"
-                    />
+                        required="true" />
                     <Text
                         text="{QuantityPerUnit}"
-                        visible="{viewModel>/viewMode}"
-                    />
+                        visible="{viewModel>/viewMode}" />
 
                     <!-- Precio -->
-                    <Label text="{i18n>unitPrice}" />
+                    <Label text="Precio Unitario" />
                     <Input
-                        value="{newProduct>/UnitPrice}"
+                        value="{
+                            path: 'newProduct>/UnitPrice',
+                            type: 'sap.ui.model.type.Float',
+                            formatOptions: {
+                                minFractionDigits: 2,
+                                maxFractionDigits: 2
+                            }
+                        }"
                         visible="{= !${viewModel>/viewMode}}"
-                    />
+                        required="true" />
                     <Text
                         text="{UnitPrice}"
-                        visible="{viewModel>/viewMode}"
-                    />
+                        visible="{viewModel>/viewMode}" />
 
                     <!-- Unidades -->
-                    <Label text="{i18n>unitsInStock}" />
+                    <Label text="Unidades en Stock" />
                     <Input
                         value="{newProduct>/UnitsInStock}"
-                        visible="{= !${viewModel>/viewMode}}"
-                    />
+                        type="Number"
+                        visible="{= !${viewModel>/viewMode}}" />
                     <Text
                         text="{UnitsInStock}"
-                        visible="{viewModel>/viewMode}"
-                    />
+                        visible="{viewModel>/viewMode}" />
                 </f:content>
             </f:SimpleForm>
         </content>
+        
         <beginButton>
             <Button
                 text="{viewModel>/beginButtonText}"
                 type="{viewModel>/beginButtonType}"
-                press=".onDialogButtonPress"
-            />
+                press=".onDialogButtonPress" />
         </beginButton>
+        
         <endButton>
             <Button
                 text="Cancelar"
                 press=".onCancelProductDialog"
-                visible="{= !${viewModel>/viewMode}}"
-            />
+                visible="{= !${viewModel>/viewMode}}" />
         </endButton>
     </Dialog>
 </core:FragmentDefinition>

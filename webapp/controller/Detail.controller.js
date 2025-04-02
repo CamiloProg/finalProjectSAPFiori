@@ -1,8 +1,9 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageBox",
-    "sap/ui/model/json/JSONModel"
-], function (Controller, MessageBox, JSONModel) {
+    "sap/ui/model/json/JSONModel",
+    "sap/ui/core/Fragment"
+], function (Controller, MessageBox, JSONModel, Fragment) {
     "use strict";
 
     return Controller.extend("com.bootcamp.sapui5.finalproject.controller.Detail", {
@@ -15,102 +16,83 @@ sap.ui.define([
         _onObjectMatched: function (oEvent) {
             this._sCurrentSupplierID = oEvent.getParameter("arguments").SupplierID;
             
-            // Cargar datos del proveedor y sus productos
             this.getView().bindElement({
                 path: "/Suppliers(" + this._sCurrentSupplierID + ")",
                 parameters: {
-                    expand: "Products"
+                    expand: "Products,Products/Category" 
                 }
             });
-            
-            // Cargar categorías si no están cargadas
-            var oModel = this.getView().getModel();
-            if (!oModel.getProperty("/Categories")) {
-                oModel.read("/Categories", {
-                    success: function(oData) {
-                        oModel.setProperty("/Categories", oData.results);
-                    }.bind(this),
-                    error: function(oError) {
-                        // Si falla, inicializar como array vacío
-                        oModel.setProperty("/Categories", []);
-                    }
-                });
-            }
         },
 
         onNavBack: function () {
             this._oRouter.navTo("RouteHome");
         },
+        
         _initModels: function() {
             if (!this.getView().getModel("newProduct")) {
                 this.getView().setModel(new JSONModel({
                     ProductName: "",
-                    CategoryID: null, // Para el ComboBox
+                    CategoryID: null,
                     QuantityPerUnit: "",
                     UnitPrice: "",
                     UnitsInStock: ""
                 }), "newProduct");
             }
         },
-        onDialogButtonPress: function () {
-
-            var oViewModel = this._oDialog.getModel("viewModel").getData();
-
-            if (oViewModel.viewMode) {
-                this.onCloseViewDialog();
-            } else {
-                this.onSaveProduct();
-            }
-        },
-
 
         onAddProduct: function() {
-            if (!this.getView().getModel("newProduct")) {
-                this._initModels();
-            }
-            
-            // Resetear el modelo de nuevo producto
-            this.getView().getModel("newProduct").setData({
-                ProductName: "",
-                CategoryID: null,
-                QuantityPerUnit: "",
-                UnitPrice: "",
-                UnitsInStock: ""
-            });
-            
-            if (!this._oDialog) {
-                this._oDialog = sap.ui.xmlfragment(
-                    "com.bootcamp.sapui5.finalproject.view.fragments.ProductDialog",
-                    this
-                );
-                this.getView().addDependent(this._oDialog);
-            }
-            
-            this._oDialog.setModel(new JSONModel({
-                viewMode: false,
-                dialogTitle: "Nuevo Producto",
-                dialogIcon: "sap-icon://add",
-                editable: true,
-                beginButtonText: "Guardar",
-                beginButtonType: "Emphasized"
-            }), "viewModel");
-            
-            this._oDialog.open();
+            this._getDialog().then(function(oDialog) {
+                // Resetear el modelo del nuevo producto
+                this.getView().getModel("newProduct").setData({
+                    ProductName: "",
+                    CategoryID: null,
+                    QuantityPerUnit: "",
+                    UnitPrice: "",
+                    UnitsInStock: ""
+                });
+                
+                oDialog.setModel(new JSONModel({
+                    viewMode: false,
+                    dialogTitle: "Nuevo Producto",
+                    dialogIcon: "sap-icon://add",
+                    editable: true,
+                    beginButtonText: "Guardar",
+                    beginButtonType: "Emphasized"
+                }), "viewModel");
+                
+                oDialog.open();
+            }.bind(this));
         },
-        onProductPress: function (oEvent) {
-            var oSelectedItem = oEvent.getParameter("rowContext");
 
-            if (!oSelectedItem) return;
-
-            if (!this._oDialog) {
-                this._oDialog = sap.ui.xmlfragment(
-                    "com.bootcamp.sapui5.finalproject.view.fragments.ProductDialog",
-                    this
-                );
-                this.getView().addDependent(this._oDialog);
+        onRowSelected: function(oEvent) {
+            var oSelectedRow = oEvent.getParameter("rowContext");
+            if (!oSelectedRow) return;
+        
+            this._getDialog().then(function(oDialog) {
+                this._showProductDetails(oSelectedRow, oDialog);
+            }.bind(this));
+        },
+        
+        _getDialog: function() {
+            if (this._oDialog) {
+                return Promise.resolve(this._oDialog);
             }
-
-            this._oDialog.setModel(new sap.ui.model.json.JSONModel({
+            
+            return Fragment.load({
+                id: this.getView().getId(),
+                name: "com.bootcamp.sapui5.finalproject.view.fragments.ProductDialog",
+                controller: this
+            }).then(function(oDialog) {
+                this._oDialog = oDialog;
+                this.getView().addDependent(this._oDialog);
+                return this._oDialog;
+            }.bind(this));
+        },
+        
+        _showProductDetails: function(oRowContext, oDialog) {
+            oDialog = oDialog || this._oDialog;
+            
+            oDialog.setModel(new JSONModel({
                 viewMode: true,
                 dialogTitle: "Detalle del Producto",
                 dialogIcon: "sap-icon://product",
@@ -118,15 +100,25 @@ sap.ui.define([
                 beginButtonText: "Cerrar",
                 beginButtonType: "Default"
             }), "viewModel");
-
-            this._oDialog.bindElement({
-                path: oSelectedItem.getPath(),
+        
+            oDialog.bindElement({
+                path: oRowContext.getPath(),
                 parameters: {
                     expand: "Category"
                 }
             });
+        
+            oDialog.open();
+        },
 
-            this._oDialog.open();
+        onDialogButtonPress: function() {
+            var oViewModel = this._oDialog.getModel("viewModel").getData();
+            
+            if (oViewModel.viewMode) {
+                this.onCloseViewDialog();
+            } else {
+                this.onSaveProduct();
+            }
         },
 
         onCancelProductDialog: function () {
@@ -139,60 +131,14 @@ sap.ui.define([
 
         onSaveProduct: function() {
             var oNewProduct = this.getView().getModel("newProduct").getData();
-            var oSupplierModel = this.getView().getModel();
             
-            // Validar campos obligatorios
-            if (!oNewProduct.ProductName || !oNewProduct.CategoryID) {
+            if (!oNewProduct.ProductName || !oNewProduct.QuantityPerUnit || !oNewProduct.UnitPrice) {
                 MessageBox.error("Por favor complete los campos obligatorios");
                 return;
             }
             
-            // Obtener categoría seleccionada (con comprobación de seguridad)
-            var aCategories = oSupplierModel.getProperty("/Categories") || [];
-            var sCategoryName = "";
-            
-            // Buscar el nombre de la categoría (forma compatible)
-            for (var i = 0; i < aCategories.length; i++) {
-                if (aCategories[i].CategoryID == oNewProduct.CategoryID) {
-                    sCategoryName = aCategories[i].CategoryName;
-                    break;
-                }
-            }
-            
-            // Crear objeto de producto con formato compatible
-            var oProductToAdd = {
-                ProductID: "temp_" + Math.random().toString(36).substr(2, 9),
-                ProductName: oNewProduct.ProductName,
-                Category: {
-                    CategoryID: oNewProduct.CategoryID,
-                    CategoryName: sCategoryName
-                },
-                QuantityPerUnit: oNewProduct.QuantityPerUnit,
-                UnitPrice: parseFloat(oNewProduct.UnitPrice) || 0,
-                UnitsInStock: parseInt(oNewProduct.UnitsInStock) || 0
-            };
-            
-            // Obtener productos actuales o inicializar array si no existe
-            var sSupplierPath = "/Suppliers(" + this._sCurrentSupplierID + ")";
-            var aProducts = oSupplierModel.getProperty(sSupplierPath + "/Products") || [];
-            
-            // Agregar el nuevo producto
-            aProducts.push(oProductToAdd);
-            
-            // Actualizar el modelo
-            oSupplierModel.setProperty(sSupplierPath + "/Products", aProducts);
-            
-            // Cerrar el diálogo
             this._oDialog.close();
-            
-            // Mostrar mensaje de éxito
             MessageBox.success("Producto agregado visualmente");
-            
-            // Forzar actualización de la tabla
-            var oTable = this.byId("productsTable");
-            if (oTable && oTable.getBinding("rows")) {
-                oTable.getBinding("rows").refresh();
-            }
-        },
+        }
     });
 });

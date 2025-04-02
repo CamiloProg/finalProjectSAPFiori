@@ -2,9 +2,8 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
      "com/bootcamp/sapui5/finalproject/utils/HomeHelper",
      "sap/ui/model/FilterOperator",
-     "sap/ui/model/FilterType",
-     "sap/ui/model/Filter",
-], (Controller, HomeHelper, FilterOperator, FilterType, Filter,) => {
+    "sap/ui/model/Filter"
+], (Controller, HomeHelper, FilterOperator, Filter,) => {
     "use strict";
 
     return Controller.extend("com.bootcamp.sapui5.finalproject.controller.Home", {
