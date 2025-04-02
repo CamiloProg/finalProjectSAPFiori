@@ -18,7 +18,7 @@
                 
                 <f:content>
                     <!-- ID Producto -->
-                    <Label text="ID Producto" />
+                    <Label text="{i18n>productID}" />
                     <Input
                         value="{newProduct>/ProductID}"
                         enabled="false"
@@ -28,7 +28,7 @@
                         visible="{viewModel>/viewMode}" />
 
                     <!-- Nombre Producto -->
-                    <Label text="Nombre Producto" />
+                    <Label text="{i18n>productName}" />
                     <Input
                         value="{newProduct>/ProductName}"
                         visible="{= !${viewModel>/viewMode}}"
@@ -38,8 +38,9 @@
                         visible="{viewModel>/viewMode}" />
 
                     <!-- Categoría -->
-                    <Label text="Categoría" />
+                    <Label text="{i18n>category}" />
                     <ComboBox 
+                        id="categoryComboBox"
                         selectedKey="{newProduct>/CategoryID}"
                         items="{
                             path: '/Categories',
@@ -55,7 +56,7 @@
                         visible="{viewModel>/viewMode}" />
 
                     <!-- Cantidad -->
-                    <Label text="Cantidad por Unidad" />
+                    <Label text="{i18n>quantityPerUnit}" />
                     <Input
                         value="{newProduct>/QuantityPerUnit}"
                         visible="{= !${viewModel>/viewMode}}"
@@ -65,7 +66,7 @@
                         visible="{viewModel>/viewMode}" />
 
                     <!-- Precio -->
-                    <Label text="Precio Unitario" />
+                    <Label text="{i18n>UnitPrice}" />
                     <Input
                         value="{
                             path: 'newProduct>/UnitPrice',
@@ -82,7 +83,7 @@
                         visible="{viewModel>/viewMode}" />
 
                     <!-- Unidades -->
-                    <Label text="Unidades en Stock" />
+                    <Label text="{i18n>UnitsInStock}" />
                     <Input
                         value="{newProduct>/UnitsInStock}"
                         type="Number"
@@ -103,7 +104,7 @@
         
         <endButton>
             <Button
-                text="Cancelar"
+                text="{i18n>dialogCancelButton}"
                 press=".onCancelProductDialog"
                 visible="{= !${viewModel>/viewMode}}" />
         </endButton>

@@ -11,8 +11,15 @@ sap.ui.define([
             this._oRouter = this.getOwnerComponent().getRouter();
             this._oRouter.getRoute("RouteDetail").attachPatternMatched(this._onObjectMatched, this);
             this._initModels();
+            this._initTemporaryProductsModel();
+            this._clearTemporaryProducts(); 
         },
-
+        _initTemporaryProductsModel: function() {
+            this._oTempProductsModel = new JSONModel({
+                temporaryProducts: []
+            });
+            this.getView().setModel(this._oTempProductsModel, "tempProducts");
+        },
         _onObjectMatched: function (oEvent) {
             this._sCurrentSupplierID = oEvent.getParameter("arguments").SupplierID;
             
@@ -25,7 +32,17 @@ sap.ui.define([
         },
 
         onNavBack: function () {
+    
+            this._clearTemporaryProducts();
             this._oRouter.navTo("RouteHome");
+        },
+        
+
+        _clearTemporaryProducts: function() {
+            this._oTempProductsModel.setData({
+                temporaryProducts: []
+            });
+            this._oTempProductsModel.refresh(true);
         },
         
         _initModels: function() {
@@ -42,7 +59,7 @@ sap.ui.define([
 
         onAddProduct: function() {
             this._getDialog().then(function(oDialog) {
-                // Resetear el modelo del nuevo producto
+
                 this.getView().getModel("newProduct").setData({
                     ProductName: "",
                     CategoryID: null,
@@ -92,22 +109,32 @@ sap.ui.define([
         _showProductDetails: function(oRowContext, oDialog) {
             oDialog = oDialog || this._oDialog;
             
+            var bIsTemporary = oRowContext.getObject().__temporary;
+            
             oDialog.setModel(new JSONModel({
                 viewMode: true,
-                dialogTitle: "Detalle del Producto",
-                dialogIcon: "sap-icon://product",
+                dialogTitle: bIsTemporary ? "Producto Temporal" : "Detalle del Producto",
+                dialogIcon: bIsTemporary ? "sap-icon://temporary" : "sap-icon://product",
                 editable: false,
                 beginButtonText: "Cerrar",
-                beginButtonType: "Default"
+                beginButtonType: "Default",
+                isTemporary: bIsTemporary
             }), "viewModel");
         
-            oDialog.bindElement({
-                path: oRowContext.getPath(),
-                parameters: {
-                    expand: "Category"
-                }
-            });
-        
+            if (bIsTemporary) {
+                oDialog.bindElement({
+                    path: oRowContext.getPath(),
+                    model: "tempProducts"
+                });
+            } else {
+                oDialog.bindElement({
+                    path: oRowContext.getPath(),
+                    parameters: {
+                        expand: "Category"
+                    }
+                });
+            }
+            
             oDialog.open();
         },
 
@@ -132,13 +159,49 @@ sap.ui.define([
         onSaveProduct: function() {
             var oNewProduct = this.getView().getModel("newProduct").getData();
             
+
             if (!oNewProduct.ProductName || !oNewProduct.QuantityPerUnit || !oNewProduct.UnitPrice) {
                 MessageBox.error("Por favor complete los campos obligatorios");
                 return;
             }
             
+            oNewProduct.ProductID = "temp-" + new Date().getTime();
+            oNewProduct.SupplierID = this._sCurrentSupplierID;
+            oNewProduct.__temporary = true;
+
+            if (oNewProduct.CategoryID) {
+                oNewProduct.Category = {
+                    CategoryID: oNewProduct.CategoryID,
+                    CategoryName: this._getSelectedCategoryName() || "Sin categoría"
+                };
+            }
+            
+            var oTempModel = this.getView().getModel("tempProducts");
+            var aTempProducts = oTempModel.getProperty("/temporaryProducts") || [];
+            
+            aTempProducts.push(oNewProduct);
+     
+            oTempModel.setData({
+                temporaryProducts: aTempProducts
+            });
+            console.log("Producto temporal agregado:", oNewProduct);
+            console.log("Todos los productos temporales:", aTempProducts);
+            oTempModel.refresh(true);
+            
             this._oDialog.close();
             MessageBox.success("Producto agregado visualmente");
+        },
+        onTempRowSelected: function(oEvent) {
+            var oSelectedRow = oEvent.getParameter("rowContext");
+            if (!oSelectedRow) return;
+        
+            this._getDialog().then(function(oDialog) {
+                this._showProductDetails(oSelectedRow, oDialog);
+            }.bind(this));
+        },
+        _getSelectedCategoryName: function() {
+            var oComboBox = Fragment.byId(this.getView().getId(), "categoryComboBox");
+            return oComboBox ? oComboBox.getSelectedItem().getText() : null;
         }
     });
 });

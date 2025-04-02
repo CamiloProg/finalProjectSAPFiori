@@ -4,108 +4,212 @@
     xmlns="sap.m"
     xmlns:f="sap.ui.layout.form"
     xmlns:core="sap.ui.core"
-    xmlns:table="sap.ui.table">
+    xmlns:table="sap.ui.table"
+    xmlns:layout="sap.ui.layout">
     
-    <Page id="pageDetail" title="Detalle Proveedor" showNavButton="true" navButtonPress="onNavBack">
+    <Page id="pageDetail" 
+          title="{i18n>titleDetail}" 
+          showNavButton="true" 
+          navButtonPress="onNavBack"
+          enableScrolling="false">
+        
         <content>
-            <VBox>
+            <VBox width="100%">
                 <!-- Sección de información del proveedor -->
                 <f:SimpleForm
                     editable="false"
                     layout="ResponsiveGridLayout"
-                    title="Información del Proveedor"
-                    labelSpanXL="3" labelSpanL="3"
-                    labelSpanM="3" labelSpanS="12"
+                    title="{i18n>customerInformation}"
+                    width="100%"
+                    labelSpanXL="3" 
+                    labelSpanL="3"
+                    labelSpanM="3" 
+                    labelSpanS="12"
                     adjustLabelSpan="false" 
-                    emptySpanXL="4" emptySpanL="4" 
-                    emptySpanM="4" emptySpanS="0"
-                    columnsXL="1" columnsL="1" columnsM="1"
+                    emptySpanXL="4" 
+                    emptySpanL="4" 
+                    emptySpanM="4" 
+                    emptySpanS="0"
+                    columnsXL="1" 
+                    columnsL="1" 
+                    columnsM="1"
                     singleContainerFullSize="false">
                     
                     <f:content>
-                        <Label text="ID Proveedor"/>
+                        <Label text="{i18n>productID}"/>
                         <Text text="{SupplierID}"/>
                         
-                        <Label text="Nombre Compañía"/>
+                        <Label text="{i18n>CompanyName}"/>
                         <Text text="{CompanyName}"/>
                         
-                        <Label text="Contacto"/>
+                        <Label text="{i18n>ContactName}"/>
                         <Text text="{ContactName}"/>
                         
-                        <Label text="Título Contacto"/>
+                        <Label text="{i18n>ContactTitle}"/>
                         <Text text="{ContactTitle}"/>
                         
-                        <Label text="Dirección"/>
+                        <Label text="{i18n>Address}"/>
                         <Text text="{Address}, {PostalCode}, {City}"/>
                         
-                        <Label text="País"/>
+                        <Label text="{i18n>Country}"/>
                         <Text text="{Country}"/>
                         
-                        <Label text="Teléfono"/>
+                        <Label text="{i18n>Phone}"/>
                         <Text text="{Phone}"/>
                     </f:content>
                 </f:SimpleForm>
                 
                 <!-- Tabla de productos del proveedor -->
-                <Panel headerText="Productos del Proveedor" expandable="true" expanded="true">
+                <Panel headerText="{i18n>customerOrders}" 
+                       expandable="true" 
+                       expanded="true" 
+                       width="100%"
+                       class="sapUiNoContentPadding">
+                    
                     <headerToolbar>
-                        <OverflowToolbar>
-                            <Title text="Productos"/>
+                        <OverflowToolbar width="90%">
+                            <Title text="{i18n>Product}"/>
                             <ToolbarSpacer/>
                             <Button 
                                 icon="sap-icon://add" 
-                                text="Agregar Producto" 
+                                text="{i18n>createProduct}" 
                                 press=".onAddProduct"/>
                         </OverflowToolbar>
                     </headerToolbar>
                     
-                 <table:Table 
+                    <!-- Tabla principal de productos (OData) -->
+                    <table:Table 
                         id="productsTable"
-                        rows="{path: 'Products', templateShareable: false}"
+                        rows="{
+                            path: 'Products',
+                            templateShareable: false,
+                            parameters: {
+                                expand: 'Category'
+                            }
+                        }"
                         selectionMode="Single"
                         selectionBehavior="RowOnly"
-                        rowSelectionChange=".onRowSelected">
+                        rowSelectionChange=".onRowSelected"
+                        width="100%"
+                        columnHeaderVisible="true"
+                        enableColumnReordering="false"
+                       >
                         
                         <table:columns>
-                            <table:Column width="100px">
-                                <Label text="ID"/>
+                            <table:Column width="12%">
+                                <Label text="{i18n>productID}"/>
                                 <table:template>
-                                    <Text text="{ProductID}"/>
+                                    <Text text="{ProductID}" wrapping="false"/>
                                 </table:template>
                             </table:Column>
                             
-                            <table:Column width="150px">
-                                <Label text="Categoría"/>
+                            <table:Column width="18%">
+                                <Label text="{i18n>category}"/>
                                 <table:template>
-                                    <Text text="{Category/CategoryName}"/>
+                                    <Text text="{Category/CategoryName}" wrapping="false"/>
                                 </table:template>
                             </table:Column>
                             
-                            <table:Column width="200px">
-                                <Label text="Nombre Producto"/>
+                            <table:Column width="25%">
+                                <Label text="{i18n>productName}"/>
                                 <table:template>
-                                    <Text text="{ProductName}"/>
+                                    <Text text="{ProductName}" wrapping="false"/>
                                 </table:template>
                             </table:Column>
                             
-                            <table:Column width="150px">
-                                <Label text="Cantidad por Unidad"/>
+                            <table:Column width="15%">
+                                <Label text="{i18n>quantityPerUnit}"/>
                                 <table:template>
-                                    <Text text="{QuantityPerUnit}"/>
+                                    <Text text="{QuantityPerUnit}" wrapping="false"/>
                                 </table:template>
                             </table:Column>
                             
-                      <table:Column width="100px" hAlign="End">
-                        <Label text="Precio Unitario"/>
-                        <table:template>
-                            <Text text="{UnitPrice}"/>
-                        </table:template>
-                    </table:Column>
-                            
-                            <table:Column width="100px" hAlign="End">
-                                <Label text="Unidades en Stock"/>
+                            <table:Column width="15%" hAlign="End">
+                                <Label text="{i18n>UnitPrice}"/>
                                 <table:template>
-                                    <Text text="{UnitsInStock}"/>
+                                    <Text text="{
+                                        path: 'UnitPrice',
+                                        type: 'sap.ui.model.type.Float',
+                                        formatOptions: {
+                                            minFractionDigits: 2,
+                                            maxFractionDigits: 2
+                                        }
+                                    }" wrapping="false"/>
+                                </table:template>
+                            </table:Column>
+                            
+                            <table:Column width="15%" hAlign="End">
+                                <Label text="{i18n>UnitsInStock}"/>
+                                <table:template>
+                                    <Text text="{UnitsInStock}" wrapping="false"/>
+                                </table:template>
+                            </table:Column>
+                        </table:columns>
+                    </table:Table>
+                    
+                    <!-- Tabla de productos temporales (JSONModel) -->
+                    <table:Table 
+                        id="tempProductsTable"
+                        rows="{
+                            path: 'tempProducts>/temporaryProducts',
+                            templateShareable: false
+                        }"
+                        visible="{= ${tempProducts>/temporaryProducts}.length > 0}"
+                        selectionMode="Single"
+                        selectionBehavior="RowOnly"
+                        rowSelectionChange=".onTempRowSelected"
+                        width="100%"
+                        columnHeaderVisible="true"
+                        enableColumnReordering="false"
+                      >
+                        
+                        <table:columns>
+                            <table:Column width="12%">
+                                <Label text="{i18n>productID}"/>
+                                <table:template>
+                                    <Text text="{tempProducts>ProductID}" wrapping="false"/>
+                                </table:template>
+                            </table:Column>
+                            
+                            <table:Column width="18%">
+                                <Label text="{i18n>category}"/>
+                                <table:template>
+                                    <Text text="{tempProducts>Category/CategoryName}" wrapping="false"/>
+                                </table:template>
+                            </table:Column>
+                            
+                            <table:Column width="25%">
+                                <Label text="{i18n>productName}"/>
+                                <table:template>
+                                    <Text text="{tempProducts>ProductName}" wrapping="false"/>
+                                </table:template>
+                            </table:Column>
+                            
+                            <table:Column width="15%">
+                                <Label text="{i18n>quantityPerUnit}"/>
+                                <table:template>
+                                    <Text text="{tempProducts>QuantityPerUnit}" wrapping="false"/>
+                                </table:template>
+                            </table:Column>
+                            
+                            <table:Column width="15%" hAlign="End">
+                                <Label text="{i18n>UnitPrice}"/>
+                                <table:template>
+                                    <Text text="{
+                                        path: 'tempProducts>UnitPrice',
+                                        type: 'sap.ui.model.type.Float',
+                                        formatOptions: {
+                                            minFractionDigits: 2,
+                                            maxFractionDigits: 2
+                                        }
+                                    }" wrapping="false"/>
+                                </table:template>
+                            </table:Column>
+                            
+                            <table:Column width="15%" hAlign="End">
+                                <Label text="{i18n>UnitsInStock}"/>
+                                <table:template>
+                                    <Text text="{tempProducts>UnitsInStock}" wrapping="false"/>
                                 </table:template>
                             </table:Column>
                         </table:columns>
