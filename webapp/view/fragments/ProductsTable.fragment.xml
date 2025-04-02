@@ -38,13 +38,6 @@
                 </template>
             </Column>
             
-            <!-- Dirección -->
-            <Column id="colAddress" sortProperty="Address" filterProperty="Address">
-                <m:Label text="Dirección" />
-                <template>
-                    <m:Text text="{SupplierCollection>Address}"/>
-                </template>
-            </Column>
             
             <!-- Ciudad -->
             <Column id="colCity" sortProperty="City" filterProperty="City">
@@ -54,13 +47,6 @@
                 </template>
             </Column>
             
-            <!-- Código Postal -->
-            <Column id="colPostal" sortProperty="PostalCode" filterProperty="PostalCode">
-                <m:Label text="Código Postal" />
-                <template>
-                    <m:Text text="{SupplierCollection>PostalCode}"/>
-                </template>
-            </Column>
             
             <!-- País -->
             <Column id="colCountry" sortProperty="Country" filterProperty="Country">

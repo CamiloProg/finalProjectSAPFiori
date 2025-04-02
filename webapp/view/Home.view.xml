@@ -3,30 +3,18 @@
     xmlns:c="sap.ui.core"
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}">
-         <HBox
-            class="sapUiSmallMargin"
-        > 
+         <HBox class="sapUiSmallMargin"> 
              <HBox>
-               
                 <VBox class="sapUiSmallMarginEnd">
                     <Label
-                        labelFor="comboboxID"
-                        text="{i18n>SupplierID}"
+                        labelFor="inputFilter"
+                        text="{i18n>filterLabel}"
                     />
-                    <ComboBox
-                        id="comboboxID"
-                        selectionChange=".onSelectionChange"
-                        selectedKey="{LocalDataModel>/selectedKey}"
-                        items="{
-					path: '/Suppliers',
-					sorter: { path: 'SupplierID' }
-				}"
-                    >
-                        <c:Item
-                            key="{SupplierID}"
-                            text="{SupplierID} "
-                        />
-                    </ComboBox>
+                    <Input 
+                        id="inputFilter"
+                        placeholder=""
+                        liveChange=".onFilterChange"
+                    />
                 </VBox>
                 <VBox class="sapUiSmallMarginEnd">
                     <Label
@@ -35,12 +23,12 @@
                     />
                     <MultiComboBox
                         selectionChange=".handleSelectionChange"
-                        selectionFinish="handleSelectionFinish"
+                        selectionFinish=".handleSelectionFinish"
                         selectedKeys="{LocalDataModel>/selectedKeyMulti}"
                         items="{
-                                path: '/Suppliers',
-                                sorter: { path: 'City' }
-                               }"
+                            path: '/Suppliers',
+                            sorter: { path: 'City' }
+                        }"
                     >
                         <c:Item
                             key="{City}"
@@ -48,34 +36,13 @@
                         />
                     </MultiComboBox>
                 </VBox>
-                <VBox class="sapUiSmallMarginEnd">
-                    <Label
-                        labelFor="comboboxID"
-                        text="{i18n>CompanyName}"
-                    />
-                    <MultiInput
-                        id="multiInput4"
-                        showValueHelp="false"
-                        selectedKey="{LocalDataModel>/selectedItem}"
-                        tokenUpdate=""
-                        suggestionItems="{
-                                        path: '/Suppliers',
-                                        sorter: { path: 'CompanyName' }
-                                    }"
-                    >
-                        <c:Item
-                            key="{CompanyName}"
-                            text="{SupplierID} - {CompanyName}"
-                        />
-                    </MultiInput>
-                </VBox>
             </HBox>
-                <Button
-                    id="btnBuscar"
-                    text="{i18n>textBuscar}"
-                    press=".onPress"
-                    class="sapUiSmallMarginTop"
-                />            
+            <Button
+                id="btnBuscar"
+                text="{i18n>textBuscar}"
+                press=".onPress"
+                class="sapUiSmallMarginTop"
+            />            
         </HBox>
         
         <VBox id="vTest2">

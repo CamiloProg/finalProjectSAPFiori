@@ -85,7 +85,5 @@
         </content>
     </Page>
     
-    <!-- Incluir el diálogo como dependencia -->
-    <core:Fragment fragmentName="com.bootcamp.sapui5.finalproject.view.fragments.CreateProductDialog" type="XML"/>
-    <core:Fragment fragmentName="com.bootcamp.sapui5.finalproject.view.fragments.ViewProductDialog" type="XML"/>
+   
 </mvc:View>
