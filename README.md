@@ -26,6 +26,9 @@
     <a href="https://fe4f51a4trial.launchpad.cfapps.us10.hana.ondemand.com/7524fc38-ff47-48be-b0de-883060a93beb.combootcampsapui5finalproject.combootcampsapui5finalproject-0.0.1/index.html">[ Link al proyecto final ]</a>
 </div>
 
+<br>
+<hr>
+
 <div align='center'>
 
    <div>
@@ -48,20 +51,19 @@
 </div>
 
 <div align='center'>
-   <img src="![Capture](https://github.com/user-attachments/assets/91a02c2c-0fd4-45f7-a0ae-c76b09cd1c8b)"
+   <img src="./webapp/imgs/Capture.PNG"
  alt="mini" width="666" height="500">
 </div>
-![Capture](https://github.com/user-attachments/assets/024d6200-59cb-4ba8-99ed-a3ffd35be5c3)
 
 <div align='center'>
-   <img src="![image](https://github.com/user-attachments/assets/99ac91a1-ebe2-4fef-88e3-54e5a3858765)
-" alt="mini" width="666" height="500">
+   <img src="./webapp/imgs/Capture2.PNG" alt="mini"  height="500">
+</div>
+<div align='center'>
+   <img src="./webapp/imgs/Capture3.PNG" alt="mini"  height="500">
+</div><div align='center'>
+   <img src="./webapp/imgs/Capture4.PNG" alt="mini"  height="500">
 </div>
 
-<div align='center'>
-   <img src="https://github.com/user-attachments/assets/a4adc243-979f-40c1-956d-da55642ff0c1" alt="mini" >
-   <img src="https://github.com/user-attachments/assets/39681bab-6782-4bbb-9ede-fc50a72f643a" alt="mini" >
-</div>
 
 <br>
 
