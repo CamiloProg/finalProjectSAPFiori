@@ -77,50 +77,46 @@
                         </OverflowToolbar>
                     </headerToolbar>
                     
-                    <!-- Tabla principal de productos (OData) -->
+                    <!-- Tabla de productos (JSONModel) -->
                     <table:Table 
                         id="productsTable"
                         rows="{
-                            path: 'Products',
-                            templateShareable: false,
-                            parameters: {
-                                expand: 'Category'
-                            }
+                            path: 'localModel>/products',
+                            templateShareable: false
                         }"
                         selectionMode="Single"
                         selectionBehavior="RowOnly"
                         rowSelectionChange=".onRowSelected"
                         width="100%"
                         columnHeaderVisible="true"
-                        enableColumnReordering="false"
-                       >
+                        enableColumnReordering="false">
                         
                         <table:columns>
                             <table:Column width="12%">
                                 <Label text="{i18n>productID}"/>
                                 <table:template>
-                                    <Text text="{ProductID}" wrapping="false"/>
+                                    <Text text="{localModel>ProductID}" wrapping="false"/>
                                 </table:template>
                             </table:Column>
                             
                             <table:Column width="18%">
                                 <Label text="{i18n>category}"/>
                                 <table:template>
-                                    <Text text="{Category/CategoryName}" wrapping="false"/>
+                                    <Text text="{localModel>Category/CategoryName}" wrapping="false"/>
                                 </table:template>
                             </table:Column>
                             
                             <table:Column width="25%">
                                 <Label text="{i18n>productName}"/>
                                 <table:template>
-                                    <Text text="{ProductName}" wrapping="false"/>
+                                    <Text text="{localModel>ProductName}" wrapping="false"/>
                                 </table:template>
                             </table:Column>
                             
                             <table:Column width="15%">
                                 <Label text="{i18n>quantityPerUnit}"/>
                                 <table:template>
-                                    <Text text="{QuantityPerUnit}" wrapping="false"/>
+                                    <Text text="{localModel>QuantityPerUnit}" wrapping="false"/>
                                 </table:template>
                             </table:Column>
                             
@@ -128,7 +124,7 @@
                                 <Label text="{i18n>UnitPrice}"/>
                                 <table:template>
                                     <Text text="{
-                                        path: 'UnitPrice',
+                                        path: 'localModel>UnitPrice',
                                         type: 'sap.ui.model.type.Float',
                                         formatOptions: {
                                             minFractionDigits: 2,
@@ -141,75 +137,7 @@
                             <table:Column width="15%" hAlign="End">
                                 <Label text="{i18n>UnitsInStock}"/>
                                 <table:template>
-                                    <Text text="{UnitsInStock}" wrapping="false"/>
-                                </table:template>
-                            </table:Column>
-                        </table:columns>
-                    </table:Table>
-                    
-                    <!-- Tabla de productos temporales (JSONModel) -->
-                    <table:Table 
-                        id="tempProductsTable"
-                        rows="{
-                            path: 'tempProducts>/temporaryProducts',
-                            templateShareable: false
-                        }"
-                        visible="{= ${tempProducts>/temporaryProducts}.length > 0}"
-                        selectionMode="Single"
-                        selectionBehavior="RowOnly"
-                        rowSelectionChange=".onTempRowSelected"
-                        width="100%"
-                        columnHeaderVisible="true"
-                        enableColumnReordering="false"
-                      >
-                        
-                        <table:columns>
-                            <table:Column width="12%">
-                                <Label text="{i18n>productID}"/>
-                                <table:template>
-                                    <Text text="{tempProducts>ProductID}" wrapping="false"/>
-                                </table:template>
-                            </table:Column>
-                            
-                            <table:Column width="18%">
-                                <Label text="{i18n>category}"/>
-                                <table:template>
-                                    <Text text="{tempProducts>Category/CategoryName}" wrapping="false"/>
-                                </table:template>
-                            </table:Column>
-                            
-                            <table:Column width="25%">
-                                <Label text="{i18n>productName}"/>
-                                <table:template>
-                                    <Text text="{tempProducts>ProductName}" wrapping="false"/>
-                                </table:template>
-                            </table:Column>
-                            
-                            <table:Column width="15%">
-                                <Label text="{i18n>quantityPerUnit}"/>
-                                <table:template>
-                                    <Text text="{tempProducts>QuantityPerUnit}" wrapping="false"/>
-                                </table:template>
-                            </table:Column>
-                            
-                            <table:Column width="15%" hAlign="End">
-                                <Label text="{i18n>UnitPrice}"/>
-                                <table:template>
-                                    <Text text="{
-                                        path: 'tempProducts>UnitPrice',
-                                        type: 'sap.ui.model.type.Float',
-                                        formatOptions: {
-                                            minFractionDigits: 2,
-                                            maxFractionDigits: 2
-                                        }
-                                    }" wrapping="false"/>
-                                </table:template>
-                            </table:Column>
-                            
-                            <table:Column width="15%" hAlign="End">
-                                <Label text="{i18n>UnitsInStock}"/>
-                                <table:template>
-                                    <Text text="{tempProducts>UnitsInStock}" wrapping="false"/>
+                                    <Text text="{localModel>UnitsInStock}" wrapping="false"/>
                                 </table:template>
                             </table:Column>
                         </table:columns>

@@ -20,56 +20,56 @@
                     <!-- ID Producto -->
                     <Label text="{i18n>productID}" />
                     <Input
-                        value="{newProduct>/ProductID}"
+                        value="{localModel>/newProduct/ProductID}"
                         enabled="false"
                         visible="{= !${viewModel>/viewMode}}" />
                     <Text
-                        text="{ProductID}"
+                        text="{localModel>ProductID}"
                         visible="{viewModel>/viewMode}" />
 
                     <!-- Nombre Producto -->
                     <Label text="{i18n>productName}" />
                     <Input
-                        value="{newProduct>/ProductName}"
+                        value="{localModel>/newProduct/ProductName}"
                         visible="{= !${viewModel>/viewMode}}"
                         required="true" />
                     <Text
-                        text="{ProductName}"
+                        text="{localModel>ProductName}"
                         visible="{viewModel>/viewMode}" />
 
                     <!-- Categoría -->
                     <Label text="{i18n>category}" />
                     <ComboBox 
                         id="categoryComboBox"
-                        selectedKey="{newProduct>/CategoryID}"
+                        selectedKey="{localModel>/newProduct/CategoryID}"
                         items="{
-                            path: '/Categories',
+                            path: 'categories>/',
                             templateShareable: false
                         }"
                         visible="{= !${viewModel>/viewMode}}"
                         required="true"
-                        enabled="{= ${/Categories}.length > 0}">
-                        <core:Item key="{CategoryID}" text="{CategoryName}"/>
+                        enabled="{= ${categories>/}.length > 0}">
+                        <core:Item key="{categories>CategoryID}" text="{categories>CategoryName}"/>
                     </ComboBox>
                     <Text
-                        text="{Category/CategoryName}"
+                        text="{localModel>Category/CategoryName}"
                         visible="{viewModel>/viewMode}" />
 
                     <!-- Cantidad -->
                     <Label text="{i18n>quantityPerUnit}" />
                     <Input
-                        value="{newProduct>/QuantityPerUnit}"
+                        value="{localModel>/newProduct/QuantityPerUnit}"
                         visible="{= !${viewModel>/viewMode}}"
                         required="true" />
                     <Text
-                        text="{QuantityPerUnit}"
+                        text="{localModel>QuantityPerUnit}"
                         visible="{viewModel>/viewMode}" />
 
                     <!-- Precio -->
                     <Label text="{i18n>UnitPrice}" />
                     <Input
                         value="{
-                            path: 'newProduct>/UnitPrice',
+                            path: 'localModel>/newProduct/UnitPrice',
                             type: 'sap.ui.model.type.Float',
                             formatOptions: {
                                 minFractionDigits: 2,
@@ -79,17 +79,24 @@
                         visible="{= !${viewModel>/viewMode}}"
                         required="true" />
                     <Text
-                        text="{UnitPrice}"
+                        text="{
+                            path: 'localModel>UnitPrice',
+                            type: 'sap.ui.model.type.Float',
+                            formatOptions: {
+                                minFractionDigits: 2,
+                                maxFractionDigits: 2
+                            }
+                        }"
                         visible="{viewModel>/viewMode}" />
 
                     <!-- Unidades -->
                     <Label text="{i18n>UnitsInStock}" />
                     <Input
-                        value="{newProduct>/UnitsInStock}"
+                        value="{localModel>/newProduct/UnitsInStock}"
                         type="Number"
                         visible="{= !${viewModel>/viewMode}}" />
                     <Text
-                        text="{UnitsInStock}"
+                        text="{localModel>UnitsInStock}"
                         visible="{viewModel>/viewMode}" />
                 </f:content>
             </f:SimpleForm>
