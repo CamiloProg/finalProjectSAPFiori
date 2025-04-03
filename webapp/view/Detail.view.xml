@@ -77,7 +77,7 @@
                         </OverflowToolbar>
                     </headerToolbar>
                     
-                    <!-- Tabla de productos (JSONModel) -->
+                    <!-- Tabla de productos  -->
                     <table:Table 
                         id="productsTable"
                         rows="{
