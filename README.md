@@ -52,7 +52,7 @@
 
 <div align='center'>
    <img src="./webapp/imgs/Capture.PNG"
- alt="mini" width="666" height="500">
+ alt="mini"  height="500">
 </div>
 
 <div align='center'>
